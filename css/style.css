@@ -1,13 +1,14 @@
+/* 🌿 AVOYELLES OUTDOORS INC. — EDITORIAL AESTHETIC REFINEMENT */
+
+/* @import MUST be first — browsers silently ignore it if placed after any other rules */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Open+Sans:wght@300;400;600&display=swap');
+
 /* base img reset */
 img {
   max-width: 100%;
   height: auto;
   display: block;
 }
-
-/* 🌿 AVOYELLES OUTDOORS INC. — EDITORIAL AESTHETIC REFINEMENT */
-
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Open+Sans:wght@300;400;600&display=swap');
 
 :root {
   --primary:       #C30000;   /* Bold Editorial Red */
