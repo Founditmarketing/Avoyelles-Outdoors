@@ -457,7 +457,7 @@ header.scrolled {
   width: 260px;
 }
 
-.floating-brand-card.husqvarna { bottom: 10%; left: -10%; border-color: #FF6B00; }
+
 .floating-brand-card.poolife { top: 15%; right: -5%; border-color: var(--electric-blue); }
 
 .floating-brand-card .brand-label {
