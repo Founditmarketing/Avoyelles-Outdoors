@@ -553,6 +553,11 @@ section {
   padding: var(--section-pad);
 }
 
+/* Ensure anchor sections clear the fixed nav */
+section[id] {
+  scroll-margin-top: calc(var(--nav-height) + 20px);
+}
+
 .section-label {
   color: var(--primary);
   font-weight: 900;
@@ -793,7 +798,7 @@ footer {
 /* CTA Banner */
 .cta-banner {
   background: var(--primary);
-  padding: 100px 0;
+  padding: 120px 0 !important;
   text-align: center;
 }
 
