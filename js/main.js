@@ -78,10 +78,14 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 6. Current Year in Footer
+    // 6. Current Year in Footer & Hero Bar
     const yearSpan = document.getElementById('year');
     if (yearSpan) {
         yearSpan.textContent = new Date().getFullYear();
+    }
+    const heroYear = document.getElementById('hero-year');
+    if (heroYear) {
+        heroYear.textContent = new Date().getFullYear();
     }
 
     // 7. Live Open/Closed Status
@@ -136,4 +140,39 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('a[href*="google.com/maps/place/Avoyelles"]').forEach(link => {
         link.href = 'https://search.google.com/local/writereview?placeid=ChIJFzH6H6qPJIYR7M2_eH7Z1w8';
     });
+
+    // 9. Formspree AJAX Contact Form
+    const contactForm = document.getElementById('contactForm');
+    if (contactForm) {
+        contactForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const btn = document.getElementById('submitBtn');
+            const successEl = document.getElementById('form-success');
+            const errorEl = document.getElementById('form-error');
+
+            // Reset states
+            if (successEl) successEl.style.display = 'none';
+            if (errorEl) errorEl.style.display = 'none';
+            if (btn) { btn.disabled = true; btn.textContent = 'Sending…'; }
+
+            try {
+                const response = await fetch(contactForm.action, {
+                    method: 'POST',
+                    headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+                    body: JSON.stringify(Object.fromEntries(new FormData(contactForm)))
+                });
+
+                if (response.ok) {
+                    contactForm.reset();
+                    if (successEl) successEl.style.display = 'block';
+                    if (btn) { btn.style.display = 'none'; }
+                } else {
+                    throw new Error('Server error');
+                }
+            } catch (err) {
+                if (errorEl) errorEl.style.display = 'block';
+                if (btn) { btn.disabled = false; btn.innerHTML = 'Send Message <i class="fa-solid fa-paper-plane"></i>'; }
+            }
+        });
+    }
 });

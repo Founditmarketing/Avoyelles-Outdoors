@@ -73,12 +73,19 @@
             <div class="grid-2">
                 <div class="reveal">
                     <h2 class="section-title">Send Us a Message</h2>
-                    <form id="contactForm" action="mailto:avoyoutdoors@kricket.net" method="POST" enctype="text/plain">
-                        <div><label for="name">Full Name *</label><input type="text" id="name" name="name" required placeholder="John Doe"></div>
+                    <form id="contactForm" action="https://formspree.io/f/avoyoutdoors" method="POST">
+                        <div><label for="name">Full Name *</label><input type="text" id="name" name="name" required placeholder="Your name"></div>
                         <div><label for="phone">Phone Number</label><input type="tel" id="phone" name="phone" placeholder="(318) 000-0000"></div>
-                        <div><label for="email">Email Address *</label><input type="email" id="email" name="email" required placeholder="john@example.com"></div>
+                        <div><label for="email">Email Address *</label><input type="email" id="email" name="email" required placeholder="your@email.com"></div>
                         <div><label for="message">Message *</label><textarea id="message" name="message" rows="5" required placeholder="How can we help with your pool or equipment?"></textarea></div>
-                        <button type="submit" class="btn btn-primary" style="width: 100%;">Send Message <i class="fa-solid fa-paper-plane"></i></button>
+                        <button type="submit" id="submitBtn" class="btn btn-primary" style="width: 100%;">Send Message <i class="fa-solid fa-paper-plane"></i></button>
+                        <div id="form-success" style="display:none; margin-top:20px; padding:20px; background:rgba(34,197,94,0.1); border:1px solid #22c55e; border-radius:var(--radius-sm); color:#22c55e; text-align:center;">
+                            <i class="fa-solid fa-circle-check" style="font-size:1.5rem; margin-bottom:10px;"></i>
+                            <p style="font-weight:700; margin:0;">Message sent! We'll be in touch soon.</p>
+                        </div>
+                        <div id="form-error" style="display:none; margin-top:20px; padding:20px; background:rgba(239,68,68,0.1); border:1px solid #ef4444; border-radius:var(--radius-sm); color:#ef4444; text-align:center;">
+                            <p style="font-weight:700; margin:0;">Something went wrong. Please call us at (318) 253-8559.</p>
+                        </div>
                     </form>
                 </div>
                 <div class="reveal" style="transition-delay: 0.2s;">
