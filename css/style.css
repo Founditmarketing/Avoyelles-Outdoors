@@ -776,6 +776,13 @@ footer {
   padding: 0 40px;
 }
 
+/* When .container is used directly on a <section>, restore vertical padding */
+section.container {
+  padding: var(--section-pad);
+  padding-left: 40px;
+  padding-right: 40px;
+}
+
 .text-center { text-align: center; }
 .mb-20 { margin-bottom: 20px; }
 .mt-40 { margin-top: 40px; }
