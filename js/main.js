@@ -56,24 +56,46 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // 5. Form Validation (Contact Page)
+    // 5. Formspree AJAX Contact Form
     const contactForm = document.getElementById('contactForm');
     if (contactForm) {
-        contactForm.addEventListener('submit', (e) => {
+        contactForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const btn = document.getElementById('submitBtn');
+            const successEl = document.getElementById('form-success');
+            const errorEl = document.getElementById('form-error');
+
+            // Basic validation
             const name = document.getElementById('name').value;
             const email = document.getElementById('email').value;
             const message = document.getElementById('message').value;
-
-            if (!name || !email || !message) {
-                e.preventDefault();
-                alert('Please fill in all required fields.');
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!name || !email || !message || !emailRegex.test(email)) {
+                if (errorEl) { errorEl.querySelector('p').textContent = 'Please fill in all required fields with a valid email.'; errorEl.style.display = 'block'; }
                 return;
             }
 
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email)) {
-                e.preventDefault();
-                alert('Please enter a valid email address.');
+            // Reset feedback
+            if (successEl) successEl.style.display = 'none';
+            if (errorEl) errorEl.style.display = 'none';
+            if (btn) { btn.disabled = true; btn.textContent = 'Sending…'; }
+
+            try {
+                const response = await fetch(contactForm.action, {
+                    method: 'POST',
+                    headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+                    body: JSON.stringify(Object.fromEntries(new FormData(contactForm)))
+                });
+                if (response.ok) {
+                    contactForm.reset();
+                    if (successEl) successEl.style.display = 'block';
+                    if (btn) btn.style.display = 'none';
+                } else {
+                    throw new Error('Server error');
+                }
+            } catch (err) {
+                if (errorEl) { errorEl.querySelector('p').textContent = 'Something went wrong. Please call us at (318) 253-8559.'; errorEl.style.display = 'block'; }
+                if (btn) { btn.disabled = false; btn.innerHTML = 'Send Message <i class="fa-solid fa-paper-plane"></i>'; }
             }
         });
     }
@@ -136,43 +158,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // 8. Update Google Review links to use correct Place ID
+    // 9. Update Google Review links to use correct Place ID
     document.querySelectorAll('a[href*="google.com/maps/place/Avoyelles"]').forEach(link => {
         link.href = 'https://search.google.com/local/writereview?placeid=ChIJFzH6H6qPJIYR7M2_eH7Z1w8';
     });
-
-    // 9. Formspree AJAX Contact Form
-    const contactForm = document.getElementById('contactForm');
-    if (contactForm) {
-        contactForm.addEventListener('submit', async function(e) {
-            e.preventDefault();
-            const btn = document.getElementById('submitBtn');
-            const successEl = document.getElementById('form-success');
-            const errorEl = document.getElementById('form-error');
-
-            // Reset states
-            if (successEl) successEl.style.display = 'none';
-            if (errorEl) errorEl.style.display = 'none';
-            if (btn) { btn.disabled = true; btn.textContent = 'Sending…'; }
-
-            try {
-                const response = await fetch(contactForm.action, {
-                    method: 'POST',
-                    headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-                    body: JSON.stringify(Object.fromEntries(new FormData(contactForm)))
-                });
-
-                if (response.ok) {
-                    contactForm.reset();
-                    if (successEl) successEl.style.display = 'block';
-                    if (btn) { btn.style.display = 'none'; }
-                } else {
-                    throw new Error('Server error');
-                }
-            } catch (err) {
-                if (errorEl) errorEl.style.display = 'block';
-                if (btn) { btn.disabled = false; btn.innerHTML = 'Send Message <i class="fa-solid fa-paper-plane"></i>'; }
-            }
-        });
-    }
 });
