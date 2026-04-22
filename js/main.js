@@ -122,12 +122,12 @@ document.addEventListener('DOMContentLoaded', () => {
         if (isOpen) {
             statusDot.style.background = '#22c55e';
             statusDot.style.boxShadow = '0 0 10px #22c55e';
-            statusValue.innerHTML = '<span class="status-dot" style="background:#22c55e;box-shadow:0 0 10px #22c55e;width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:8px;"></span>OPEN NOW';
+            statusValue.textContent = 'OPEN NOW';
             statusSub.textContent = closingMsg;
         } else {
             statusDot.style.background = '#ef4444';
             statusDot.style.boxShadow = '0 0 10px #ef4444';
-            statusValue.innerHTML = '<span class="status-dot" style="background:#ef4444;box-shadow:0 0 10px #ef4444;width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:8px;"></span>CLOSED';
+            statusValue.textContent = 'CLOSED';
             statusSub.textContent = closingMsg;
         }
     }
