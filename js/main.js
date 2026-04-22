@@ -83,4 +83,57 @@ document.addEventListener('DOMContentLoaded', () => {
     if (yearSpan) {
         yearSpan.textContent = new Date().getFullYear();
     }
+
+    // 7. Live Open/Closed Status
+    // Hours: Mon–Fri 7:30–17:00, Sat 7:30–12:00, Sun closed (Central Time)
+    const statusDot = document.querySelector('.status-dot');
+    const statusValue = statusDot ? statusDot.closest('.stat-item').querySelector('.stat-value') : null;
+    const statusSub = statusDot ? statusDot.closest('.stat-item').querySelector('.stat-sub') : null;
+
+    if (statusDot && statusValue && statusSub) {
+        // Get current time in US Central (handles CST/CDT automatically)
+        const now = new Date();
+        const centralTime = new Date(now.toLocaleString('en-US', { timeZone: 'America/Chicago' }));
+        const day = centralTime.getDay(); // 0=Sun, 1=Mon...6=Sat
+        const h = centralTime.getHours();
+        const m = centralTime.getMinutes();
+        const mins = h * 60 + m;
+
+        let isOpen = false;
+        let closingMsg = '';
+
+        if (day >= 1 && day <= 5) {
+            // Mon–Fri: 7:30–17:00
+            isOpen = mins >= 450 && mins < 1020;
+            if (isOpen) closingMsg = 'Closing at 5:00 PM';
+            else if (mins < 450) closingMsg = 'Opens at 7:30 AM';
+            else closingMsg = 'Opens Mon at 7:30 AM';
+        } else if (day === 6) {
+            // Saturday: 7:30–12:00
+            isOpen = mins >= 450 && mins < 720;
+            if (isOpen) closingMsg = 'Closing at 12:00 PM';
+            else if (mins < 450) closingMsg = 'Opens at 7:30 AM';
+            else closingMsg = 'Opens Mon at 7:30 AM';
+        } else {
+            // Sunday
+            closingMsg = 'Opens Mon at 7:30 AM';
+        }
+
+        if (isOpen) {
+            statusDot.style.background = '#22c55e';
+            statusDot.style.boxShadow = '0 0 10px #22c55e';
+            statusValue.innerHTML = '<span class="status-dot" style="background:#22c55e;box-shadow:0 0 10px #22c55e;width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:8px;"></span>OPEN NOW';
+            statusSub.textContent = closingMsg;
+        } else {
+            statusDot.style.background = '#ef4444';
+            statusDot.style.boxShadow = '0 0 10px #ef4444';
+            statusValue.innerHTML = '<span class="status-dot" style="background:#ef4444;box-shadow:0 0 10px #ef4444;width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:8px;"></span>CLOSED';
+            statusSub.textContent = closingMsg;
+        }
+    }
+
+    // 8. Update Google Review links to use correct Place ID
+    document.querySelectorAll('a[href*="google.com/maps/place/Avoyelles"]').forEach(link => {
+        link.href = 'https://search.google.com/local/writereview?placeid=ChIJFzH6H6qPJIYR7M2_eH7Z1w8';
+    });
 });
