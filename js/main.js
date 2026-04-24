@@ -43,6 +43,38 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // 3b. Touch-friendly dropdown menus
+    // On touch devices, hover doesn't exist — we use a click/tap toggle instead.
+    const dropdowns = document.querySelectorAll('.dropdown');
+    dropdowns.forEach(dropdown => {
+        const trigger = dropdown.querySelector('.nav-link');
+        if (!trigger) return;
+
+        trigger.addEventListener('click', (e) => {
+            // Only intercept the click when the dropdown has children to show
+            const menu = dropdown.querySelector('.dropdown-menu');
+            if (!menu) return;
+
+            const isOpen = dropdown.classList.contains('dropdown-open');
+
+            // Close all other open dropdowns first
+            dropdowns.forEach(d => d.classList.remove('dropdown-open'));
+
+            if (!isOpen) {
+                e.preventDefault(); // prevent navigation; tap again to follow link
+                dropdown.classList.add('dropdown-open');
+            }
+            // If it was already open, we closed it above — let the link navigate naturally
+        });
+    });
+
+    // Close any open dropdown when clicking outside the nav
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.dropdown')) {
+            dropdowns.forEach(d => d.classList.remove('dropdown-open'));
+        }
+    });
+
     // 4. Active Page Highlighting
     const currentPath = window.location.pathname;
     const navItems = document.querySelectorAll('.nav-link');
