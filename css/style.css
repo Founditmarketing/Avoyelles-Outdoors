@@ -188,13 +188,15 @@ header.scrolled {
   border-radius: 2px;
 }
 
-.logo-text h1 {
+.logo-text .logo-name {
   font-family: var(--font-display);
   font-weight: 900;
   font-size: 1.3rem;
   line-height: 1;
   letter-spacing: -0.05em;
   margin: 0;
+  display: block;
+  text-transform: uppercase;
 }
 
 .logo-text p {
