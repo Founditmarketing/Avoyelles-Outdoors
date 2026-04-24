@@ -44,31 +44,38 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // 3b. Touch-friendly dropdown menus
-    // On touch devices, hover doesn't exist — we use a click/tap toggle instead.
+    // Mobile: tapping opens accordion inline; second tap on same item navigates.
+    // Desktop: hover still works; click also works as a fallback.
     const dropdowns = document.querySelectorAll('.dropdown');
+
     dropdowns.forEach(dropdown => {
         const trigger = dropdown.querySelector('.nav-link');
-        if (!trigger) return;
+        const menu    = dropdown.querySelector('.dropdown-menu');
+        if (!trigger || !menu) return;
 
         trigger.addEventListener('click', (e) => {
-            // Only intercept the click when the dropdown has children to show
-            const menu = dropdown.querySelector('.dropdown-menu');
-            if (!menu) return;
-
             const isOpen = dropdown.classList.contains('dropdown-open');
 
-            // Close all other open dropdowns first
-            dropdowns.forEach(d => d.classList.remove('dropdown-open'));
-
-            if (!isOpen) {
-                e.preventDefault(); // prevent navigation; tap again to follow link
-                dropdown.classList.add('dropdown-open');
+            if (isOpen) {
+                // Second tap: close the menu and allow normal link navigation
+                dropdown.classList.remove('dropdown-open');
+                // let the browser follow the href naturally
+                return;
             }
-            // If it was already open, we closed it above — let the link navigate naturally
+
+            // First tap: open the menu, suppress navigation
+            e.preventDefault();
+
+            // Close any other open dropdowns
+            dropdowns.forEach(d => {
+                if (d !== dropdown) d.classList.remove('dropdown-open');
+            });
+
+            dropdown.classList.add('dropdown-open');
         });
     });
 
-    // Close any open dropdown when clicking outside the nav
+    // Close all dropdowns when tapping/clicking anywhere outside
     document.addEventListener('click', (e) => {
         if (!e.target.closest('.dropdown')) {
             dropdowns.forEach(d => d.classList.remove('dropdown-open'));

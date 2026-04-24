@@ -242,16 +242,23 @@ header.scrolled {
   position: relative;
 }
 
+/* Chevron rotates when open */
+.dropdown .fa-chevron-down {
+  transition: transform 0.25s ease;
+}
+.dropdown.dropdown-open .fa-chevron-down {
+  transform: rotate(180deg);
+}
+
+/* ── DESKTOP: floating panel ───────────────────────────────── */
 .dropdown-menu {
   position: absolute;
-  top: 100%;
+  top: calc(100% - 4px); /* overlap slightly so cursor bridge works */
   left: 0;
-  /* Extra top padding creates an invisible bridge between the trigger
-     and the menu so the cursor/touch doesn't drop the hover state */
-  padding: 12px 20px 20px;
-  margin-top: 0;
+  /* Top padding = invisible bridge so cursor doesn't leave the hover zone */
+  padding: 10px 20px 20px;
   background: var(--dark-2);
-  min-width: 250px;
+  min-width: 220px;
   border-radius: var(--radius-sm);
   box-shadow: var(--shadow-hover);
   opacity: 0;
@@ -259,13 +266,17 @@ header.scrolled {
   transform: translateY(6px);
   transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s ease;
   border: 1px solid var(--mid);
-  /* Extend the clickable hit-area upward to close the gap */
   border-top: none;
+  z-index: 1001;
 }
 
-/* Desktop hover */
-.dropdown:hover .dropdown-menu,
-/* Touch / JS-toggled */
+/* Desktop hover open */
+.dropdown:hover .dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+/* JS / touch open (works on both desktop & mobile) */
 .dropdown.dropdown-open .dropdown-menu {
   opacity: 1;
   visibility: visible;
@@ -334,7 +345,43 @@ header.scrolled {
     padding: 60px 40px;
     z-index: 999;
     animation: fadeInUp 0.4s ease forwards;
-    gap: 40px;
+    gap: 0; /* accordion gaps handled by items */
+    overflow-y: auto;
+  }
+
+  /* Mobile nav items get generous touch targets */
+  body.nav-open .nav-links > li {
+    padding: 18px 0;
+    border-bottom: 1px solid var(--mid);
+  }
+
+  /* ── MOBILE dropdown: accordion, NOT floating ─────────────── */
+  body.nav-open .dropdown-menu {
+    position: static !important;   /* break out of the absolute float */
+    opacity: 1 !important;
+    visibility: hidden;            /* still hidden until opened */
+    transform: none !important;
+    box-shadow: none;
+    border: none;
+    padding: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, visibility 0.3s ease;
+    background: transparent;
+    margin-left: 16px;
+  }
+
+  /* When the JS adds .dropdown-open on mobile */
+  body.nav-open .dropdown.dropdown-open .dropdown-menu {
+    visibility: visible;
+    max-height: 300px;  /* large enough for any menu */
+    padding: 8px 0;
+  }
+
+  body.nav-open .dropdown-menu a {
+    padding: 12px 0;
+    font-size: 0.9rem;
+    color: var(--text-muted);
   }
 
   body.nav-open .nav-cta {
